@@ -22,8 +22,8 @@
         --font-size-base: 1.125rem;
         --line-height-base: 1.4;
         --letter-spacing-base: -0.5px;
-
-        /* Новая палитра */
+    
+        /* Палитра */
         --color-company-name: #009472;
         --color-header-button: #902923;
         --color-bg: #b9baa3;
@@ -31,9 +31,63 @@
         --color-submit-btn: #009472;
         --color-white: #ffffff;
         --color-tel: #F3AA20;
-
+      }
+    
+      .scale-wrapper {
+        transform: scale(1.2);
+        transform-origin: top center;
+      }
+      .scale-wrapper #map {
+        transform: scale(0.8333);
+        transform-origin: top center;
       }
 
+      html, body {
+        overflow-x: hidden;
+      }
+      @media (max-height: 1200px) {
+        .card {
+          transform: scale(0.93);
+          transform-origin: center center;
+        }
+      }
+      @media (max-height: 1060px) {
+        .card {
+          transform: scale(0.87);
+          transform-origin: center center;
+        }
+      }
+      @media (max-height: 1000px) {
+        .card {
+          transform: scale(0.8);
+          transform-origin: center center;
+        }
+      }
+      @media (max-height: 900px) {
+        .card {
+          transform: scale(0.7);
+          transform-origin: center center;
+        }
+        .form-container {
+          top: 30%; 
+        }
+      }
+      @media (max-height: 800px) {
+        .card {
+          transform: scale(0.6);
+          transform-origin: center center;
+        }
+      }
+      @media (max-height: 700px) {
+        .card {
+          transform: scale(0.55);
+          transform-origin: center center;
+        }
+      }
+      
+
+
+      
       body {
         font-family: var(--font-family-main);
         font-size: var(--font-size-base);
@@ -42,7 +96,7 @@
         color: var(--color-text-main);
         background-color: #ffffff;
       }
-
+    
       header {
         background-color: var(--color-white);
         position: fixed;
@@ -144,6 +198,10 @@
       #faq .card-body {
         color: var(--color-text-main);
       }
+      label {
+        padding-bottom: 1rem;
+      }
+
 
     </style>
 </head>

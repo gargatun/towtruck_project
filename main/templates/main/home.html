@@ -4,65 +4,49 @@
 
 {% block content %}
 <!-- Шапка сайта (Header) -->
-<header class="py-3 shadow">
-  <div class="container d-flex justify-content-between align-items-center">
-    <!-- Левая часть: Логотип и название компании -->
-    <div class="d-flex align-items-center">
-      <img
-        src="{% static 'images/logo.png' %}"
-        alt="Логотип"
-        width="50"
-        height="50"
-      />
-      <span class="ml-2 h4 mb-0">Эвакуатор Спб</span>
-    </div>
-    <!-- Центр: Кнопки навигации -->
-    <nav>
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link" href="#main-section">Главная</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#advantages">Преимущества</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#faq">FAQ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contacts">Контакты</a>
-        </li>
-      </ul>
-    </nav>
-    <!-- Правая часть: Номер телефона (скругленная кнопка, увеличенные отступы) -->
-       <!-- Контейнер для иконок и номера -->
-  <div class="d-flex align-items-center">
-    <!-- Значок Telegram -->
-    <a href="https://t.me/YourTelegramLink" class="social-icon">
+<div class="scale-wrapper">
+<header class="header-bar">
+  <div class="header-left d-flex align-items-center">
+    <img src="{% static 'images/logo.png' %}" alt="Логотип" width="50" height="50" />
+    <span class="ml-2 h4 mb-0 company-name">Эвакуатор Спб</span>
+  </div>
+
+  <div class="header-nav d-flex align-items-center">
+    <ul class="nav d-none d-lg-flex"> <!-- эти скрываются при сужении экрана -->
+      <li class="nav-item"><a class="nav-link" href="#main-section">Главная</a></li>
+      <li class="nav-item"><a class="nav-link" href="#advantages">Преимущества</a></li>
+      <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+      <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+    </ul>
+  </div>
+
+  <div class="header-right d-flex align-items-center">
+    <a href="https://t.me/YourTelegramLink" class="social-icon tg-icon">
       <i class="fa fa-telegram"></i>
     </a>
-    <!-- Значок WhatsApp -->
-    <a href="https://wa.me/YourWhatsAppLink" class="social-icon">
+    <a href="https://wa.me/YourWhatsAppLink" class="social-icon wa-icon">
       <i class="fa fa-whatsapp"></i>
     </a>
-    <div>
+    <div class="desktop-phone d-none d-md-block">
       <a href="tel:+71234567890" class="btn btn-primary" style="white-space: nowrap;">+7 123 456 78 90</a>
     </div>
+    <!-- Для мобильной версии добавим иконку телефона, будет показана при узком экране -->
+    <a href="tel:+71234567890" class="social-icon phone-icon d-md-none">
+      <i class="fa fa-phone"></i>
+    </a>
   </div>
 </header>
 
 <!-- Основной блок -->
 <main id="main-section">
-  <div class="position-relative">
-    <!-- Карта на весь экран -->
-    <div id="map" style="width: 100%; height: 70vh">
-      <!-- Инициализируем с центром на Москве -->
-    </div>
+  <div class="position-relative" style="width:100%; height:70vh;">
+    <div id="map" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>
+  </div>
     <!-- Форма поверх карты -->
-    <div
-      class="position-absolute"
+    <div class="form-container position-absolute" 
       style="
-        top: 50%;
-        left: 20%;
+        top: 48%;
+        left: 30%;
         transform: translate(-50%, -50%);
         max-width: 500px;
         width: 90%;
@@ -107,25 +91,28 @@
                 </div>
               </div>
               
-            <div class="form-group row align-items-center">
-              <label for="id_wheels_blocked" class="col-sm-6 col-form-label">Количество заблокированных колес</label>
-              <div class="col-sm-6">
-                <div class="counter-container">
-                  <button id="decrement" class="counter-button" type="button">-</button>
-                  <span id="counter-value" class="counter-value">0</span>
-                  <button id="increment" class="counter-button" type="button">+</button>
-                  {{ form.wheels_blocked }}
-                </div>
-              </div>
-            </div>
+<!-- Вместо двух отдельных блоков делаем один общий -->
+<div class="form-group d-flex align-items-center flex-wrap justify-content-between">
+  <!-- Блок с количеством заблокированных колёс -->
+  <div class="d-flex align-items-center mb-2 mb-md-0">
+    <label for="id_wheels_blocked" class="mb-0 mr-2">Количество заблокированных колес:</label>
+    <div class="counter-container d-flex align-items-center">
+      <button id="decrement" class="counter-button mr-1" type="button">-</button>
+      <span id="counter-value" class="counter-value mr-1">0</span>
+      <button id="increment" class="counter-button mr-2" type="button">+</button>
+      {{ form.wheels_blocked }}
+    </div>
+  </div>
   
-            <div class="form-group">
-              <label for="id_steering_blocked" class="form-label">Руль заблокирован?</label>
-              <label class="switch">
-                {{ form.steering_blocked }}
-                <span class="slider round"></span>
-              </label>
-            </div>
+  <!-- Блок с блокировкой руля -->
+  <div class="d-flex align-items-center">
+    <label for="id_steering_blocked" class="mb-0 mr-2">Руль заблокирован?</label>
+    <label class="switch mb-0">
+      {{ form.steering_blocked }}
+      <span class="slider round"></span>
+    </label>
+  </div>
+</div>
             <div class="form-group">
                 {{ form.additional_comments.label_tag }}
                 {{ form.additional_comments }}
@@ -138,6 +125,8 @@
         </form>
       </div>
     </div>
+
+    
   </div>
 </main>
 
@@ -357,6 +346,7 @@
     </div>
   </div>
 </footer>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -478,7 +468,7 @@
               iconLayout: "default#image",
               iconImageHref: '{% static "images/marker_a.png" %}',
               iconImageSize: [50, 50],
-              iconImageOffset: [-25, -25],
+              iconImageOffset: [-25, -50],
             }
           );
           map.geoObjects.add(pickupPlacemark);
@@ -494,7 +484,7 @@
               iconLayout: "default#image",
               iconImageHref: '{% static "images/marker_b.png" %}',
               iconImageSize: [50, 50],
-              iconImageOffset: [-25, -25],
+              iconImageOffset: [-25, -50],
             }
           );
           map.geoObjects.add(dropoffPlacemark);
@@ -830,6 +820,7 @@
     background-color: #ccc;
     transition: 0.4s;
     border-radius: 20px;
+    transform: translateX(530%);
 }
 .slider:before {
     position: absolute;
@@ -869,7 +860,7 @@ input:checked + .slider:before {
     position: absolute;
     top: 50%;
     right: 10px;
-    transform: translateY(-50%);
+    transform: translateY(+50%);
 }
 .counter-button {
     width: 30px;
@@ -962,7 +953,7 @@ input:checked + .slider:before {
 .input-with-clear .clear-input {
     position: absolute;
     right: 10px;
-    top: 100%;
+    top: 95%;
     transform: translateY(-110%);
     cursor: pointer;
     color: rgba(0, 0, 0, 0.5);
@@ -1315,7 +1306,276 @@ input:checked + .slider:before {
     outline: none;
     box-shadow: none;
   }
+  .scroll-indicator {
+    position: absolute;
+    bottom: 20px;          /* Отступ снизу, можно настроить по вкусу */
+    left: 50%;             /* По центру */
+    transform: translateX(-50%);
+    width: 30px;
+    height: 50px;
+    border: 2px solid #fff;  /* Белая рамка, если фон карты достаточно контрастен */
+    border-radius: 15px;
+    opacity: 0.8;           /* Лёгкая прозрачность для ненавязчивости */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3); /* Лёгкая тень для объема */
+    background: rgba(0,0,0,0.2); /* Лёгкий тёмный фон, если нужно больше контраста */
+  }
   
+  .scroll-indicator span {
+    display: block;
+    width: 4px;
+    height: 10px;
+    background: #fff;
+    border-radius: 2px;
+    margin-top: 10px;
+    animation: scroll-indicator-move 2s infinite;
+  }
+  
+  @keyframes scroll-indicator-move {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+    100% { transform: translateY(0); }
+  }
+  
+  /* Базовые стили остаются как есть, ниже только добавление адаптивности */
+
+/* При ширине <= 1130px скрываем пункты меню */
+@media (max-width: 1130px) {
+  .header-nav .nav-link {
+    display: none;
+  }
+  
+  /* Смещаем левый блок вправо, можно подбирать конкретно под ваш макет */
+  .header-container {
+    justify-content: space-between;
+  }
+}
+
+/* Для мобильной версии, например <= 768px */
+@media (max-width: 768px) {
+  /* Скрываем логотип, оставляем только название компании для более компактного вида */
+  .header-left img {
+    display: none;
+  }
+
+  /* Скрываем полностью навигацию */
+  .header-nav {
+    display: none;
+  }
+
+  /* Убираем текстовый номер телефона, вместо него используем телефонную иконку */
+  .desktop-phone {
+    display: none; 
+  }
+
+  /* Показываем иконку телефона */
+  .phone-icon {
+    display: inline-block !important;
+  }
+
+  /* Размещаем все элементы в одну линию справа */
+  .header-container {
+    justify-content: flex-end;
+  }
+
+  /* Можно немного уменьшить отступы, чтобы уместить элементы */
+  .company-name {
+    margin-right: 10px;
+  }
+}
+
+.header-bar {
+  width: 100%;            /* При узких экранах шапка занимает всю ширину */
+  margin: 5px auto;       /* Центрируем блок на экране */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 120px;       /* Отступы внутри шапки */
+  box-sizing: border-box;
+  background-color: #fff;
+  margin-top: 5px;
+}
+
+/* Примерно при сужении экрана скрываем пункты меню */
+@media (max-width: 1130px) {
+  .header-nav .nav-link {
+    display: none;
+  }
+}
+@media (max-width: 3000px) {
+  .header-bar{
+    padding: 0 300px;
+  }
+}
+@media (max-width: 2000px) {
+  .header-bar{
+    padding: 0 200px;
+  }
+}
+@media (max-width: 1520px) {
+  .header-bar{
+    padding: 0 180px;
+  }
+}
+@media (max-width: 1330px) {
+  .header-bar{
+    padding: 0 140px;
+  }
+}
+@media (max-width: 1130px) {
+  .header-bar{
+    padding: 0 100px;
+  }
+}
+@media (max-width: 770px) {
+  .header-bar{
+    padding: 0 60px;
+  }
+}
+@media (max-width: 420px) {
+  .header-bar{
+    padding: 0 30px;
+  }
+}
+
+/* При ещё меньшей ширине убираем логотип, оставляем только название и иконки */
+@media (max-width: 768px) {
+  .header-left img {
+    display: none;
+  }
+  
+  .header-nav {
+    display: none;
+  }
+  
+  .desktop-phone {
+    display: none;
+  }
+}
+@media (max-width: 970px) {
+  /* Скрываем карту */
+  #map {
+    display: none;
+  }
+
+  /* Делаем форму на всю ширину */
+  /* Убираем абсолютное позиционирование у контейнера формы */
+  .form-container {
+    position: static !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    margin: 0 auto;
+    /* Добавим отступы, если нужно */
+    box-sizing: border-box;
+  }
+
+  /* Убедимся, что .card занимает всю ширину родителя */
+  .form-container .card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+@media (max-width: 970px) {
+  .position-relative {
+    height: auto !important;
+  }
+}
+@media (max-width: 970px) {
+  .form-container .card {
+    box-shadow: none !important;
+  }
+  .slider {
+
+    transform: translateX(450%);
+}
+@media (max-width: 500px) {
+
+  .slider {
+
+    transform: translateX(250%);
+}
+@media (max-width: 410px) {
+
+  .slider {
+
+    transform: translateX(150%);
+}
+@media (max-width: 330px) {
+
+  .slider {
+
+    transform: translateX(50%);
+}
+
+}
+/* Чтобы элементы оставались на одной строке при мобильной адаптации,
+   используем flex и при необходимости уменьшаем отступы */
+   .counter-container {
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  /* При очень узком экране элементы могут начать переноситься, 
+     если хотите оставить строго в одну линию, можно убрать flex-wrap и уменьшить отступы */
+  
+  /* Смещаем форму выше при мобильной адаптации */
+  @media (max-width: 970px) {
+    /* Так как карта скрывается, форму можно поднять выше */
+    .form-container {
+      position: static !important;
+      transform: none !important;
+      top: auto !important;
+      left: auto !important;
+      width: 100% !important;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+      /* Поднимаем форму выше за счёт отрицательного margin-top, если нужно */
+      margin-top: -20px; 
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .mb-md-0, .my-md-0 {
+        padding-bottom: 20px;
+    }
+}
+.mb-md-0, .my-md-0 {
+  padding-bottom: 20px;
+}
+
+/* Уменьшаем размер текста и ширину поля на мобильных устройствах */
+@media (max-width: 460px) {
+  /* Текстовая метка */
+  .form-group label {
+    max-width: 60%; /* Ограничиваем ширину текста */
+    white-space: normal; /* Разрешаем перенос текста */
+    word-wrap: break-word; /* Перенос слов при длинном тексте */
+  }
+
+  .counter-container {
+    transform: translateY(-80%);
+  }
+}
+@media (max-width: 1920px) {
+  /* Текстовая метка */
+  .form-group label {
+    max-width: 60%; /* Ограничиваем ширину текста */
+    white-space: normal; /* Разрешаем перенос текста */
+    word-wrap: break-word; /* Перенос слов при длинном тексте */
+  }
+
+  .counter-container {
+    transform: translateY(-80%);
+  }
+}
+
+
+
 
 </style>
 {% endblock %}
