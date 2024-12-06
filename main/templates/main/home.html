@@ -1,0 +1,1321 @@
+{% extends 'main/base.html' %} {% load static %}
+
+<!-- towtruck_project/main/templates/main/home.html -->
+
+{% block content %}
+<!-- Шапка сайта (Header) -->
+<header class="py-3 shadow">
+  <div class="container d-flex justify-content-between align-items-center">
+    <!-- Левая часть: Логотип и название компании -->
+    <div class="d-flex align-items-center">
+      <img
+        src="{% static 'images/logo.png' %}"
+        alt="Логотип"
+        width="50"
+        height="50"
+      />
+      <span class="ml-2 h4 mb-0">Эвакуатор Спб</span>
+    </div>
+    <!-- Центр: Кнопки навигации -->
+    <nav>
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#main-section">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#advantages">Преимущества</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#faq">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contacts">Контакты</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Правая часть: Номер телефона (скругленная кнопка, увеличенные отступы) -->
+       <!-- Контейнер для иконок и номера -->
+  <div class="d-flex align-items-center">
+    <!-- Значок Telegram -->
+    <a href="https://t.me/YourTelegramLink" class="social-icon">
+      <i class="fa fa-telegram"></i>
+    </a>
+    <!-- Значок WhatsApp -->
+    <a href="https://wa.me/YourWhatsAppLink" class="social-icon">
+      <i class="fa fa-whatsapp"></i>
+    </a>
+    <div>
+      <a href="tel:+71234567890" class="btn btn-primary" style="white-space: nowrap;">+7 123 456 78 90</a>
+    </div>
+  </div>
+</header>
+
+<!-- Основной блок -->
+<main id="main-section">
+  <div class="position-relative">
+    <!-- Карта на весь экран -->
+    <div id="map" style="width: 100%; height: 70vh">
+      <!-- Инициализируем с центром на Москве -->
+    </div>
+    <!-- Форма поверх карты -->
+    <div
+      class="position-absolute"
+      style="
+        top: 50%;
+        left: 20%;
+        transform: translate(-50%, -50%);
+        max-width: 500px;
+        width: 90%;
+      "
+    >
+    <div class="card">
+        <form method="post" id="request-form">
+          <div class="card-body">
+            <h2 class="card-title">Оставить заявку</h2>
+            {% csrf_token %}
+            <input type="hidden" name="request-form" value="1">
+
+            <div class="form-group">
+                <div class="position-relative input-with-clear">
+                  {{ form.pickup_location.label_tag }}
+                  {{ form.pickup_location }}
+                  <span class="clear-input" data-input-id="id_pickup_location">&times;</span>
+                  <div id="pickup-suggestions-container" class="suggestions-container"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="position-relative input-with-clear">
+                  {{ form.dropoff_location }}
+                  <span class="clear-input" data-input-id="id_dropoff_location">&times;</span>
+                  <div id="dropoff-suggestions-container" class="suggestions-container"></div>
+                </div>
+              </div>
+              
+            <div class="form-group">
+                {{ form.vehicle_info.label_tag }}
+                <div class="dropdown">
+                  <span id="vehicle_info_selected">Выберите...</span>
+                  {{ form.vehicle_info }} <!-- скрытое поле -->
+                  {{ form.phone_number }} <!-- скрытое поле телефона -->
+                  <div class="dropdown-content">
+                    {% for value, label in form.vehicle_info.field.choices %}
+                      {% if value != '' %}
+                        <p data-value="{{ value }}">{{ label }}</p>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              
+            <div class="form-group row align-items-center">
+              <label for="id_wheels_blocked" class="col-sm-6 col-form-label">Количество заблокированных колес</label>
+              <div class="col-sm-6">
+                <div class="counter-container">
+                  <button id="decrement" class="counter-button" type="button">-</button>
+                  <span id="counter-value" class="counter-value">0</span>
+                  <button id="increment" class="counter-button" type="button">+</button>
+                  {{ form.wheels_blocked }}
+                </div>
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="id_steering_blocked" class="form-label">Руль заблокирован?</label>
+              <label class="switch">
+                {{ form.steering_blocked }}
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="form-group">
+                {{ form.additional_comments.label_tag }}
+                {{ form.additional_comments }}
+            </div>
+
+            <button type="submit" class="btn btn-success btn-full-width">
+              Отправить заявку
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Раздел с преимуществами (используем цвет фона #b9baa3 для разнообразия) -->
+<section id="advantages" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Почему выбирают нас?</h2>
+      <div class="row">
+        <!-- Карточка 1 -->
+        <div class="col-md-4 mb-4">
+          <div class="advantage-card">
+            <div class="advantage-image">
+              <img src="{% static 'images/speed.jpg' %}" alt="Скорость">
+            </div>
+            <h3 class="advantage-title">Супер скорость</h3>
+            <p class="advantage-description">Приезжаем быстрее, чем вы успеете позвонить!</p>
+          </div>
+        </div>
+        <!-- Карточка 2 -->
+        <div class="col-md-4 mb-4">
+          <div class="advantage-card">
+            <div class="advantage-image">
+              <img src="{% static 'images/price.jpg' %}" alt="Низкие цены">
+            </div>
+            <h3 class="advantage-title">Низкие цены</h3>
+            <p class="advantage-description">Эвакуация по цене чашки кофе.</p>
+          </div>
+        </div>
+        <!-- Карточка 3 -->
+        <div class="col-md-4 mb-4">
+          <div class="advantage-card">
+            <div class="advantage-image">
+              <img src="{% static 'images/professional.jpg' %}" alt="Профессионализм">
+            </div>
+            <h3 class="advantage-title">Опытные специалисты</h3>
+            <p class="advantage-description">Только профессионалы с большим опытом.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+<!-- Раздел обратной связи -->
+<section id="contact-us" class="contact-section py-5">
+    <div class="container">
+      <div class="tab-header">
+        <div class="tab">
+          <span class="tab-dot"></span>
+          <span class="tab-text">Связаться с нами</span>
+        </div>
+      </div>
+      <div class="row align-items-center">
+        <!-- Левая часть -->
+        <div class="col-md-6">
+            <div class="contact-info">
+                <div class="contact-overlay">
+                  <h2 class="contact-title">Гарантия низкой цены</h2>
+                  <p class="contact-description">
+                    С нами эвакуатор обойдется вам в среднем на 20% дешевле, чем при обращении к конкурентам.
+                    Сравните тарифы и убедитесь сами!
+                  </p>
+                  <div class="contact-details d-flex align-items-center justify-content-between">
+                    <p class="contact-phone">8 800 707 33 50</p>
+                    <p class="contact-availability">Вызвать эвакуатор</p>
+                  </div>
+                </div>
+              </div>
+                      </div>
+        <!-- Правая часть -->
+        <div class="col-md-6">
+            <form method="post" class="contact-form">
+                {% csrf_token %}
+                <input type="hidden" name="contact-form" value="1">
+                <div class="form-group">
+                  <input type="text" name="name" class="form-control" placeholder="Ваше имя" required>
+                </div>
+                <div class="form-group">
+                  <input type="tel" name="phone_number" class="form-control" placeholder="Телефон" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-custom">
+                    Отправить заявку
+                </button>
+              </form>
+                      </div>
+      </div>
+    </div>
+  </section>
+    
+<!-- Раздел FAQ -->
+<section class="py-5" style="background-color:#ffffff;">
+    <div class="container">
+      <h2>Часто задаваемые вопросы</h2>
+      <div id="faq">
+        <!-- Вопрос 1 -->
+        <div class="card my-3">
+          <div class="card-header">
+            <h5>
+              <a href="#faq1" data-toggle="collapse">Как быстро приезжает эвакуатор?</a>
+            </h5>
+          </div>
+          <div id="faq1" class="collapse show" data-parent="#faq">
+            <div class="card-body">
+              В среднем наш эвакуатор приезжает в течение 30 минут после вызова.
+            </div>
+          </div>
+        </div>
+        <!-- Вопрос 2 -->
+        <div class="card my-3">
+          <div class="card-header">
+            <h5>
+              <a href="#faq2" data-toggle="collapse">Какие виды транспорта вы эвакуируете?</a>
+            </h5>
+          </div>
+          <div id="faq2" class="collapse" data-parent="#faq">
+            <div class="card-body">
+              Мы эвакуируем легковые автомобили, внедорожники, а также легкую спецтехнику и мотоциклы.
+            </div>
+          </div>
+        </div>
+        <!-- Вопрос 3 -->
+        <div class="card my-3">
+          <div class="card-header">
+            <h5>
+              <a href="#faq3" data-toggle="collapse">Работаете ли вы круглосуточно?</a>
+            </h5>
+          </div>
+          <div id="faq3" class="collapse" data-parent="#faq">
+            <div class="card-body">
+              Да, наши службы эвакуации работают 24/7, без выходных и праздников.
+            </div>
+          </div>
+        </div>
+        <!-- Вопрос 4 -->
+        <div class="card my-3">
+          <div class="card-header">
+            <h5>
+              <a href="#faq4" data-toggle="collapse">Как формируется стоимость услуги?</a>
+            </h5>
+          </div>
+          <div id="faq4" class="collapse" data-parent="#faq">
+            <div class="card-body">
+              Стоимость зависит от расстояния, типа транспорта и сложности работ. Мы сообщим точную цену перед выездом эвакуатора.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Раздел с отзывами -->
+  <section class="container my-5">
+    <h2>Отзывы клиентов</h2>
+    <div class="row">
+      <!-- Отзыв 1 -->
+      <div class="col-md-4 my-2">
+        <div class="card">
+          <div class="card-body">
+            <p>"Очень благодарен за оперативность и профессионализм! Рекомендую всем."</p>
+            <p class="text-right" style="color:var(--color-company-name)">- Сергей К.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Отзыв 2 -->
+      <div class="col-md-4 my-2">
+        <div class="card">
+          <div class="card-body">
+            <p>"Машина сломалась на трассе ночью. Приехали быстро, аккуратно погрузили и доставили. Спасибо!"</p>
+            <p class="text-right" style="color:var(--color-company-name)">- Анна М.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Отзыв 3 -->
+      <div class="col-md-4 my-2">
+        <div class="card">
+          <div class="card-body">
+            <p>"Доступные цены и отличный сервис. Буду обращаться еще при необходимости."</p>
+            <p class="text-right" style="color:var(--color-company-name)">- Иван П.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Отзыв 4 -->
+      <div class="col-md-4 my-2">
+        <div class="card">
+          <div class="card-body">
+            <p>"Помогли перевезти редкий автомобиль без единой царапины. Внимательные и аккуратные специалисты."</p>
+            <p class="text-right" style="color:var(--color-company-name)">- Елена С.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+<!-- Футер -->
+<footer class="py-4">
+  <div class="container">
+    <div class="row">
+      <!-- Контакты -->
+      <div class="col-md-4">
+        <h5>Контакты</h5>
+        <p>Телефон: +7 (123) 456-78-90</p>
+        <p>Email: info@evakuator.com</p>
+      </div>
+      <!-- Соцсети -->
+      <div class="col-md-4">
+        <h5>Мы в соцсетях</h5>
+        <a href="#" class="text-dark mr-3"><i class="fa fa-facebook"></i></a>
+        <a href="#" class="text-dark mr-3"><i class="fa fa-instagram"></i></a>
+        <a href="#" class="text-dark"><i class="fa fa-vk"></i></a>
+      </div>
+      <!-- Юридическая информация -->
+      <div class="col-md-4">
+        <h5>Юридическая информация</h5>
+        <p>© 2023 ООО "Эвакуатор Сервис"</p>
+        <p>Все права защищены.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  ymaps.ready(init);
+
+  function init() {
+    const map = new ymaps.Map("map", {
+      center: [59.863034, 30.39032],
+      zoom: 10,
+      controls: ["zoomControl"],
+    }, {
+      suppressMapOpenBlock: true,
+      scrollZoom: false,
+    });
+
+    let multiRoute = null;
+    const pickupInput = document.getElementById("id_pickup_location");
+    const dropoffInput = document.getElementById("id_dropoff_location");
+    let pickupPlacemark = null;
+    let dropoffPlacemark = null;
+    let nextPointType = "a";
+
+    if (!pickupInput || !dropoffInput) {
+      console.error("Элементы ввода адресов не найдены");
+      return;
+    }
+
+    pickupInput.addEventListener("input", () => updateSuggestions(pickupInput));
+    dropoffInput.addEventListener("input", () => updateSuggestions(dropoffInput));
+
+    pickupInput.addEventListener("change", async () => {
+      const coords = await geocodeAddress(pickupInput.value);
+      if (coords) {
+        setPlacemark(coords, "a");
+        updateRoute();
+      }
+    });
+
+    dropoffInput.addEventListener("change", async () => {
+      const coords = await geocodeAddress(dropoffInput.value);
+      if (coords) {
+        setPlacemark(coords, "b");
+        updateRoute();
+      }
+    });
+
+    async function updateSuggestions(inputElement) {
+      const query = inputElement.value.trim();
+      if (!query) {
+        clearSuggestions(inputElement);
+        return;
+      }
+
+      try {
+        const suggestions = await ymaps.suggest(query);
+        const suggestionsContainerId = inputElement.id === "id_pickup_location"
+          ? "pickup-suggestions-container"
+          : "dropoff-suggestions-container";
+
+        const suggestionsContainer = document.getElementById(suggestionsContainerId);
+        clearSuggestions(inputElement);
+
+        if (suggestions.length === 0) {
+          return;
+        }
+
+        const suggestionsList = document.createElement("ul");
+        suggestionsList.classList.add("list-group");
+
+        suggestions.forEach((suggestion) => {
+          const li = document.createElement("li");
+          li.textContent = suggestion.displayName;
+          li.classList.add("list-group-item", "list-group-item-action", "p-2");
+
+          li.addEventListener("click", () => {
+            inputElement.value = suggestion.displayName;
+            clearSuggestions(inputElement);
+            geocodeAddress(suggestion.displayName).then((coords) => {
+              if (coords) {
+                setPlacemark(
+                  coords,
+                  inputElement.id === "id_pickup_location" ? "a" : "b"
+                );
+                updateRoute();
+              }
+            });
+          });
+
+          suggestionsList.appendChild(li);
+        });
+
+        suggestionsContainer.appendChild(suggestionsList);
+      } catch (error) {
+        console.error("Ошибка при получении подсказок:", error);
+      }
+    }
+
+    function clearSuggestions(inputElement) {
+      const suggestionsContainerId = inputElement.id === "id_pickup_location"
+        ? "pickup-suggestions-container"
+        : "dropoff-suggestions-container";
+
+      const suggestionsContainer = document.getElementById(suggestionsContainerId);
+      if (suggestionsContainer) {
+        suggestionsContainer.innerHTML = "";
+      }
+    }
+
+    function setPlacemark(coords, type) {
+      if (type === "a") {
+        if (pickupPlacemark) {
+          pickupPlacemark.geometry.setCoordinates(coords);
+        } else {
+          pickupPlacemark = new ymaps.Placemark(
+            coords,
+            {},
+            {
+              iconLayout: "default#image",
+              iconImageHref: '{% static "images/marker_a.png" %}',
+              iconImageSize: [50, 50],
+              iconImageOffset: [-25, -25],
+            }
+          );
+          map.geoObjects.add(pickupPlacemark);
+        }
+      } else if (type === "b") {
+        if (dropoffPlacemark) {
+          dropoffPlacemark.geometry.setCoordinates(coords);
+        } else {
+          dropoffPlacemark = new ymaps.Placemark(
+            coords,
+            {},
+            {
+              iconLayout: "default#image",
+              iconImageHref: '{% static "images/marker_b.png" %}',
+              iconImageSize: [50, 50],
+              iconImageOffset: [-25, -25],
+            }
+          );
+          map.geoObjects.add(dropoffPlacemark);
+        }
+      }
+    }
+
+    function updateRoute() {
+      if (multiRoute) {
+        map.geoObjects.remove(multiRoute);
+        multiRoute = null;
+      }
+      if (pickupPlacemark && dropoffPlacemark) {
+        const fromCoords = pickupPlacemark.geometry.getCoordinates();
+        const toCoords = dropoffPlacemark.geometry.getCoordinates();
+        buildRoute(fromCoords, toCoords);
+      }
+    }
+
+    function buildRoute(fromCoords, toCoords) {
+      if (multiRoute) {
+        map.geoObjects.remove(multiRoute);
+      }
+
+      multiRoute = new ymaps.multiRouter.MultiRoute(
+        {
+          referencePoints: [fromCoords, toCoords],
+          params: {
+            routingMode: "auto",
+          },
+        },
+        {
+          boundsAutoApply: false,
+          routeActiveStrokeWidth: 5,
+          wayPointVisible: false,
+          viaPointVisible: false,
+        }
+      );
+
+      map.geoObjects.add(multiRoute);
+    }
+
+    async function geocodeAddress(address) {
+      try {
+        const result = await ymaps.geocode(address, { results: 1 });
+        const firstGeoObject = result.geoObjects.get(0);
+        if (firstGeoObject) {
+          const coords = firstGeoObject.geometry.getCoordinates();
+          return coords;
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.error("Ошибка при геокодировании:", error);
+        return null;
+      }
+    }
+
+    async function reverseGeocode(coords, type) {
+      try {
+        const result = await ymaps.geocode(coords, { results: 1 });
+        const firstGeoObject = result.geoObjects.get(0);
+        if (firstGeoObject) {
+          const address = firstGeoObject.getAddressLine();
+          if (type === "a") {
+            pickupInput.value = address;
+            if (typeof pickupInput.updateClearButtonVisibility === 'function') {
+              pickupInput.updateClearButtonVisibility();
+            }
+          } else if (type === "b") {
+            dropoffInput.value = address;
+            if (typeof dropoffInput.updateClearButtonVisibility === 'function') {
+              dropoffInput.updateClearButtonVisibility();
+            }
+          }
+          updateRoute();
+        } else {
+          alert("Не удалось определить адрес для выбранной точки.");
+        }
+      } catch (error) {
+        console.error("Ошибка при обратном геокодировании:", error);
+        alert("Ошибка при обратном геокодировании.");
+      }
+    }
+
+    map.events.add("click", function (e) {
+      const coords = e.get("coords");
+      setPlacemark(coords, nextPointType);
+      reverseGeocode(coords, nextPointType);
+      updateRoute();
+      nextPointType = nextPointType === "a" ? "b" : "a";
+    });
+
+    document.body.insertAdjacentHTML('beforeend', `
+<div class="modal fade" id="phoneModal" tabindex="-1" role="dialog" aria-labelledby="phoneModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content modal-minimal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="phoneModalLabel" style="font-weight:600; font-size:1.25rem;">Оформление заказа</h5>
+        <button type="button" class="close minimal-close" data-dismiss="modal" aria-label="Закрыть">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:1rem; color:#333;">
+          Для оформления заказа введите номер телефона. Мы перезвоним вам для подтверждения заказа.
+        </p>
+        <div class="form-group mt-3">
+          <label for="phone-input" style="font-weight:500; font-size:1rem; color:#555;">Номер телефона</label>
+          <input type="tel" class="form-control minimal-input" id="phone-input" placeholder="+7 (___) ___-__-__">
+          <span class="text-danger phone-error" style="display:none; font-size:0.9rem;">Пожалуйста, введите номер телефона</span>
+        </div>
+      </div>
+      <div class="modal-footer border-0 d-block p-0">
+        <button type="button" class="btn btn-success btn-block minimal-button" id="confirm-phone-btn" style="margin:0;">
+          Подтвердить
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    `);
+
+    const form = document.getElementById("request-form");
+    const decrementButton = document.getElementById("decrement");
+    const incrementButton = document.getElementById("increment");
+    const counterValue = document.getElementById("counter-value");
+    const wheelsBlockedInput = document.getElementById("id_wheels_blocked");
+
+    let count = parseInt(wheelsBlockedInput.value) || 0;
+    const maxCount = 4;
+
+    function updateCounter() {
+      counterValue.textContent = count;
+      wheelsBlockedInput.value = count;
+      decrementButton.disabled = count <= 0;
+      incrementButton.disabled = count >= maxCount;
+    }
+
+    decrementButton.addEventListener("click", () => {
+      if (count > 0) {
+        count--;
+        updateCounter();
+      }
+    });
+
+    incrementButton.addEventListener("click", () => {
+      if (count < maxCount) {
+        count++;
+        updateCounter();
+      }
+    });
+
+    updateCounter();
+
+    function showFieldError(input, message) {
+      let oldError = input.parentNode.querySelector('.custom-error');
+      if (oldError) oldError.remove();
+
+      const span = document.createElement('span');
+      span.classList.add('custom-error', 'text-danger');
+      span.style.fontSize = '0.9rem';
+      span.textContent = message;
+      input.parentNode.appendChild(span);
+    }
+
+    function clearFieldError(input) {
+      const errorSpan = input.parentNode.querySelector('.custom-error');
+      if (errorSpan) errorSpan.remove();
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearFieldError(pickupInput);
+      clearFieldError(dropoffInput);
+      $('#phoneModal').modal('show');
+    });
+
+    const confirmPhoneBtn = document.getElementById('confirm-phone-btn');
+    const phoneInputField = document.getElementById('phone-input');
+    const phoneError = document.querySelector('.phone-error');
+
+    confirmPhoneBtn.addEventListener('click', function() {
+      phoneError.style.display = 'none';
+      const phoneNumber = phoneInputField.value.trim();
+      if (phoneNumber === '') {
+        phoneError.style.display = 'block';
+      } else {
+        const phoneNumberField = document.getElementById('id_phone_number');
+        phoneNumberField.value = phoneNumber;
+        $('#phoneModal').modal('hide');
+        form.submit();
+      }
+    });
+      
+    const dropdown = document.querySelector('.dropdown');
+    const vehicleInfoSelected = document.getElementById('vehicle_info_selected');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const vehicleInfoField = document.getElementById('id_vehicle_info');
+
+    vehicleInfoSelected.addEventListener('click', function(event) {
+      event.stopPropagation();
+      dropdownContent.style.display =
+        dropdownContent.style.display === 'block' ? 'none' : 'block';
+    });
+
+    dropdownContent.addEventListener('click', function(e) {
+      if (e.target && e.target.matches('p[data-value]')) {
+        const selectedValue = e.target.getAttribute('data-value');
+        const selectedLabel = e.target.textContent;
+        vehicleInfoField.value = selectedValue;
+        vehicleInfoSelected.textContent = selectedLabel;
+        dropdownContent.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('click', function(event) {
+      if (!dropdown.contains(event.target)) {
+        dropdownContent.style.display = 'none';
+      }
+    });
+
+    function setupClearInputs() {
+      const clearButtons = document.querySelectorAll('.clear-input');
+      
+      clearButtons.forEach(function(clearButton) {
+        const inputId = clearButton.getAttribute('data-input-id');
+        const inputField = document.getElementById(inputId);
+
+        function updateClearButtonVisibility() {
+          if (inputField.value) {
+            clearButton.style.display = 'block';
+          } else {
+            clearButton.style.display = 'none';
+          }
+        }
+
+        inputField.addEventListener('input', updateClearButtonVisibility);
+        updateClearButtonVisibility();
+
+        clearButton.addEventListener('click', function() {
+          inputField.value = '';
+          updateClearButtonVisibility();
+          clearFieldError(inputField);
+          clearSuggestions(inputField);
+          updateRoute();
+        });
+
+        inputField.updateClearButtonVisibility = updateClearButtonVisibility;
+      });
+    }
+
+    setupClearInputs();
+
+    form.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+        event.preventDefault();
+      }
+    });
+  }
+</script>
+
+<style>
+/* Стили для подсказок */
+.suggestions-container {
+    position: absolute;
+    z-index: 1000;
+    background: white;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestions-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.suggestions-container li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.suggestions-container li:hover {
+    background-color: #f1f1f1;
+}
+
+/* Карта */
+#map {
+    pointer-events: auto;
+    cursor: pointer;
+}
+.ymaps-2-1-79-controls-controls {
+    display: none !important;
+}
+.ymaps-2-1-79-controls-zoomcontrol {
+    display: block !important;
+}
+
+/* Карточка формы */
+.card {
+    border-radius: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Поля формы */
+.form-control {
+    border-radius: 1rem;
+    padding-right: 25px;
+    color: var(--color-text-main);
+}
+
+/* Переключатель */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 25px;
+    margin-left: 10px;
+    float: right;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 17px;
+    width: 17px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: var(--color-company-name);
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-company-name);
+}
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+.slider.round {
+    border-radius: 34px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Счетчик */
+.counter-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90px;
+    height: 40px;
+    border-radius: 30px;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
+.counter-button {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    background-color: #ccc;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 50%;
+}
+.counter-button:active,
+.counter-button:focus {
+    background-color: #3a3f55;
+    outline: none;
+    border: none;
+}
+.counter-button:hover {
+    background-color: #2c3346;
+}
+.counter-button:disabled {
+    background-color: #f0f0f0;
+    color: #bbb;
+    cursor: not-allowed;
+}
+.counter-value {
+    font-size: 16px;
+}
+
+/* Выпадающий список */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+#vehicle_info_selected {
+    display: inline-block;
+    padding: 10px;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 1rem;
+    cursor: pointer;
+    color: var(--color-text-main);
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 1rem;
+}
+.dropdown-content p {
+    padding: 8px 12px;
+    margin: 0;
+    cursor: pointer;
+    color: var(--color-text-main);
+}
+.dropdown-content p:hover {
+    background-color: #f1f1f1;
+}
+
+/* Кнопка отправки заявки */
+.btn-full-width {
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-right: -20px;
+    border-radius: 0 0 2rem 2rem;
+    padding: 15px;
+    margin-bottom: -15px;
+}
+
+/* Ввод с крестиком очистки */
+.input-with-clear {
+    position: relative;
+}
+.input-with-clear .clear-input {
+    position: absolute;
+    right: 10px;
+    top: 100%;
+    transform: translateY(-110%);
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+    display: none;
+}
+.social-icon {
+    color: var(--color-tel); /* Основной цвет */
+    font-size: 2rem; /* Увеличенный размер иконки */
+    margin-right: 10px; /* Отступ между иконками */
+    transition: color 0.3s;
+  }
+  
+  .social-icon:hover {
+    color: #7f2020; /* Цвет при наведении */
+  }
+  /* Секция "Наши преимущества" */
+#advantages {
+    background-color: #f8f8f4;
+  }
+  
+  #advantages h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #232323;
+    margin-bottom: 2rem;
+  }
+  
+  .advantage-card {
+    background-color: #e0e0d6;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .advantage-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .advantage-image {
+    position: relative;
+    background-color: #d4d4c9;
+    padding: 2rem;
+    border-radius: 50%;
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .advantage-image img {
+    max-width: 100%;
+    border-radius: 50%;
+  }
+  
+  .advantage-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #232323;
+    margin-top: 1rem;
+  }
+  
+  .advantage-description {
+    font-size: 1rem;
+    color: #5a5a5a;
+    margin-top: 0.5rem;
+  }
+  .contact-section {
+    background-color: #f8f8f4;
+    border-radius: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem 1.5rem;
+  }
+  
+  .contact-info {
+    background-color: #d6d5c9; /* Тёмный фон */
+    color: #ffffff;
+    padding: 0.4rem 0.1rem;
+    border-radius: 1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.1rem;
+  }
+  
+.contact-overlay {
+  background-color: #ffffff; /* Белый внутренний слой */
+  color: #232233; /* Тёмный текст */
+  padding: 1.5rem;
+  border-radius: 0.9rem; /* Немного меньше радиуса внешнего слоя */
+
+}
+
+.contact-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #232233;
+  margin-bottom: 1rem;
+}
+  
+  .contact-description {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+  
+  .contact-details {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .contact-phone {
+    font-size: 1.5rem;
+
+    margin-bottom: 0.5rem;
+  }
+  
+  .contact-availability {
+    font-size: 1rem;
+
+  }
+  
+  .contact-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-form .form-control {
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ced4da;
+  }
+  
+  .contact-form .btn-primary {
+    background-color: #009472;
+    border-color: #009472;
+    color: #ffffff;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .contact-form .btn-primary:hover {
+    background-color: #007a5d;
+    border-color: #007a5d;
+  }
+  
+  .form-note {
+    font-size: 0.875rem;
+    color: #009472;
+    text-align: center;
+  }
+  
+  .form-note a {
+    color: #009472;
+    text-decoration: none;
+  }
+  
+  .form-note a:hover {
+    text-decoration: underline;
+  }
+  /* Стили для вкладки */
+.tab-header {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  
+  .tab {
+    display: flex;
+    align-items: center;
+    background-color: #d6d5c9; /* Цвет фона вкладки */
+    border-radius: 1rem 1rem 0 0;
+    padding: 0.5rem 1rem;
+    width: max-content;
+    position: absolute;
+    top: -2rem; /* Поднимем вкладку вверх */
+    left: 1rem;
+    z-index: 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tab-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #232323; /* Цвет точки */
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  
+  .tab-text {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #232323; /* Цвет текста */
+  }
+  /* Общие стили для кнопки */
+.btn-primary, .btn-custom {
+    background-color: #009472; /* Цвет кнопки */
+    border-color: #009472; /* Границы */
+    color: #ffffff; /* Цвет текста */
+    padding: 0.75rem 1rem;
+    border-radius: 1rem; /* Скругление */
+    font-size: 1rem;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .btn-primary:hover, .btn-custom:hover {
+    background-color: #007a5d; /* Цвет при наведении */
+    border-color: #007a5d;
+  }
+  
+  .btn-primary:active, .btn-custom:active {
+    background-color: #007a5d; /* Цвет при нажатии */
+    border-color: #007a5d;
+    transform: translateY(0); /* Возврат на место */
+  }
+  
+  /* Стили для блока "Вызвать эвакуатор и номер" */
+  .contact-details {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #232323;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #e0e0d6;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .contact-phone {
+    font-size: 1.25rem;
+    color: #009472; /* Цвет номера */
+    margin: 0;
+  }
+  
+  .contact-availability {
+    margin: 0;
+    font-size: 1rem;
+    color: #232323;
+  }
+  /* Удаляем фокусный стиль и синий цвет при зажатии */
+.btn:focus,
+.btn:active,
+.btn:focus:active,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:focus:active {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: #009472 !important; /* возвращаем базовый цвет */
+    border-color: #009472 !important;
+}
+
+/* Сохраняем ховер-эффект */
+.btn:hover,
+.btn-primary:hover {
+    background-color: #007a5d !important; /* цвет при наведении */
+    border-color: #007a5d !important;
+}
+
+/* Убираем переходы, если не нужны анимации */
+.btn,
+.btn-primary {
+    transition: none !important;
+}
+
+.card-body {
+    margin-bottom: 15px;     
+  }
+  
+  .modal-minimal {
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+  }
+  
+  .modal-minimal .modal-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .modal-minimal .modal-body {
+    padding: 1rem 1.5rem;
+  }
+  
+  .modal-minimal .modal-footer {
+    padding: 0;
+  }
+  
+  .minimal-close {
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    color: #333;
+    line-height: 1;
+    opacity: 0.7;
+  }
+  
+  .minimal-close:hover {
+    opacity: 1;
+  }
+  
+  .minimal-input {
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .minimal-input:focus {
+    border-color: #009472;
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .minimal-button {
+    border-radius: 0 0 1rem 1rem;
+    background-color: #009472;
+    border: none;
+    font-size: 1.1rem;
+    padding: 1rem;
+    font-weight: 600;
+    color: #fff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .minimal-button:hover {
+    background-color: #007a5d;
+  }
+  
+  .minimal-button:active,
+  .minimal-button:focus {
+    background-color: #007a5d;
+    outline: none;
+    box-shadow: none;
+  }
+  
+
+</style>
+{% endblock %}

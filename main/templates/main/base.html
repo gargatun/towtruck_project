@@ -1,0 +1,160 @@
+<!-- towtruck_project/main/templates/main/base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Заказ эвакуатора{% endblock %}</title>
+    <!-- Google Fonts: Inter Tight -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Дополнительные стили -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block head %}{% endblock %}
+    <style>
+      :root {
+        --font-family-main: 'Inter Tight', sans-serif;
+        --font-size-base: 1.125rem;
+        --line-height-base: 1.4;
+        --letter-spacing-base: -0.5px;
+
+        /* Новая палитра */
+        --color-company-name: #009472;
+        --color-header-button: #902923;
+        --color-bg: #b9baa3;
+        --color-text-main: #232323;
+        --color-submit-btn: #009472;
+        --color-white: #ffffff;
+        --color-tel: #F3AA20;
+
+      }
+
+      body {
+        font-family: var(--font-family-main);
+        font-size: var(--font-size-base);
+        line-height: var(--line-height-base);
+        letter-spacing: var(--letter-spacing-base);
+        color: var(--color-text-main);
+        background-color: #ffffff;
+      }
+
+      header {
+        background-color: var(--color-white);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+
+      header .h4 {
+        color: var(--color-company-name);
+        margin: 0;
+      }
+
+      header .nav-link {
+        color: var(--color-text-main);
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      header .nav-link:hover {
+        color: var(--color-company-name);
+      }
+
+      /* Кнопка вызова эвакуатора в шапке */
+      header .btn-primary {
+        background-color: var(--color-tel);
+        border-color: var(--color-tel);
+        color: var(--color-white);
+        font-weight: 600;
+        transition: background-color 0.3s;
+        border-radius: 1rem; /* Скругление кнопки */
+        letter-spacing: 0.1em; /* Увеличенный межсимвольный интервал */
+      }
+      header .btn-primary:hover {
+        background-color: #7f2020;
+        border-color: #7f2020;
+      }
+
+      /* Отступ, чтобы контент не закрывался шапкой */
+      main {
+        padding-top: 60px;
+      }
+
+      h2, h4, h5 {
+        color: var(--color-company-name);
+      }
+
+      a {
+        color: var(--color-company-name);
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: var(--color-header-button);
+      }
+
+      footer {
+        background-color: var(--color-bg);
+      }
+
+      footer h5, footer p {
+        color: var(--color-text-main);
+      }
+
+      footer a {
+        color: var(--color-text-main);
+      }
+
+      /* Иконки преимуществ (можем оставить их нейтрального цвета или #232323) */
+      #advantages i {
+        color: var(--color-header-button);
+      }
+
+      /* Кнопки "Отправить заявку" */
+      .btn-success {
+        background-color: var(--color-submit-btn)!important;
+        border-color: var(--color-submit-btn)!important;
+        font-weight: 600;
+        color: #fff;
+      }
+      .btn-success:hover {
+        background-color: #007a5d!important;
+        border-color: #007a5d!important;
+      }
+
+      /* Цвет текста в карточках отзывов */
+      .card-body p {
+        color: var(--color-text-main);
+      }
+
+      .card-body {
+        padding-bottom: 0;
+      }
+
+      /* FAQ */
+      #faq .card-header a {
+        color: var(--color-text-main);
+        font-weight: 600;
+      }
+      #faq .card-body {
+        color: var(--color-text-main);
+      }
+
+    </style>
+</head>
+<body>
+    {% block content %}{% endblock %}
+    <!-- jQuery и Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Яндекс.Карты API -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={{ geocode_api_key }}&suggest_apikey={{ suggest_api_key }}" type="text/javascript"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
