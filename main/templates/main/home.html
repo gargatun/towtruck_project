@@ -28,7 +28,7 @@
       <i class="fa fa-whatsapp"></i>
     </a>
     <div class="desktop-phone d-none d-md-block">
-      <a href="tel:+71234567890" class="btn btn-primary" style="white-space: nowrap;">+7 123 456 78 90</a>
+      <a href="tel:+71234567890" class="btn btn-primary" style="white-space: nowrap;">+7&nbsp;123&nbsp;456&nbsp;78&nbsp;90</a>
     </div>
     <!-- Для мобильной версии добавим иконку телефона, будет показана при узком экране -->
     <a href="tel:+71234567890" class="social-icon phone-icon d-md-none">
@@ -814,13 +814,13 @@
     height: 0;
 }
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 20px;
-    transform: translateX(530%);
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+  transform: translateY(-30%);
 }
 .slider:before {
     position: absolute;
@@ -851,16 +851,10 @@ input:checked + .slider:before {
 
 /* Счетчик */
 .counter-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+    justify-content: center;
+    transform: translateY(-25%);
     width: 90px;
-    height: 40px;
-    border-radius: 30px;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(+50%);
 }
 .counter-button {
     width: 30px;
@@ -894,6 +888,7 @@ input:checked + .slider:before {
 }
 .counter-value {
     font-size: 16px;
+    width: 10px;
 }
 
 /* Выпадающий список */
@@ -961,15 +956,12 @@ input:checked + .slider:before {
     display: none;
 }
 .social-icon {
-    color: var(--color-tel); /* Основной цвет */
     font-size: 2rem; /* Увеличенный размер иконки */
     margin-right: 10px; /* Отступ между иконками */
     transition: color 0.3s;
   }
   
-  .social-icon:hover {
-    color: #7f2020; /* Цвет при наведении */
-  }
+
   /* Секция "Наши преимущества" */
 #advantages {
     background-color: #f8f8f4;
@@ -1388,14 +1380,12 @@ input:checked + .slider:before {
 
 .header-bar {
   width: 100%;            /* При узких экранах шапка занимает всю ширину */
-  margin: 5px auto;       /* Центрируем блок на экране */
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 120px;       /* Отступы внутри шапки */
   box-sizing: border-box;
   background-color: #fff;
-  margin-top: 5px;
 }
 
 /* Примерно при сужении экрана скрываем пункты меню */
@@ -1404,39 +1394,44 @@ input:checked + .slider:before {
     display: none;
   }
 }
+@media (max-width: 4000px) {
+  .header-bar{
+    padding: 10px 500px;
+  }
+}
 @media (max-width: 3000px) {
   .header-bar{
-    padding: 0 300px;
+    padding: 10px 300px;
   }
 }
 @media (max-width: 2000px) {
   .header-bar{
-    padding: 0 200px;
+    padding: 10px 200px;
   }
 }
 @media (max-width: 1520px) {
   .header-bar{
-    padding: 0 180px;
+    padding: 10px 180px;
   }
 }
 @media (max-width: 1330px) {
   .header-bar{
-    padding: 0 140px;
+    padding: 10px 140px;
   }
 }
 @media (max-width: 1130px) {
   .header-bar{
-    padding: 0 100px;
+    padding: 10px 100px;
   }
 }
 @media (max-width: 770px) {
   .header-bar{
-    padding: 0 60px;
+    padding: 10px 60px;
   }
 }
 @media (max-width: 420px) {
   .header-bar{
-    padding: 0 30px;
+    padding: 10px 30px;
   }
 }
 
@@ -1472,7 +1467,6 @@ input:checked + .slider:before {
     /* Добавим отступы, если нужно */
     box-sizing: border-box;
   }
-
   /* Убедимся, что .card занимает всю ширину родителя */
   .form-container .card {
     width: 100%;
@@ -1490,25 +1484,21 @@ input:checked + .slider:before {
   }
   .slider {
 
-    transform: translateX(450%);
 }
 @media (max-width: 500px) {
 
   .slider {
 
-    transform: translateX(250%);
 }
 @media (max-width: 410px) {
 
   .slider {
 
-    transform: translateX(150%);
 }
 @media (max-width: 330px) {
 
   .slider {
 
-    transform: translateX(50%);
 }
 
 }
@@ -1569,12 +1559,12 @@ input:checked + .slider:before {
     word-wrap: break-word; /* Перенос слов при длинном тексте */
   }
 
-  .counter-container {
-    transform: translateY(-80%);
-  }
+
 }
 
-
+.fa-telegram {
+  color: #0088cc;
+}
 
 
 </style>
